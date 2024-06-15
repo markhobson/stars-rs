@@ -3,8 +3,28 @@ async function init() {
         fetch("./target/wasm32-unknown-unknown/release/rust_demo.wasm")
     );
 
-    const answer = instance.exports.the_answer();
-    console.log(answer);
+    const width = 600;
+    const height = 600;
+
+    const canvas = document.getElementById("main");
+    canvas.width = width;
+    canvas.height = height;
+
+    const buffer_address = instance.exports.BUFFER.value;
+    const image = new ImageData(
+        new Uint8ClampedArray(
+            instance.exports.memory.buffer,
+            buffer_address,
+            4 * width * height,
+        ),
+        width,
+    );
+
+    const ctx = canvas.getContext("2d");
+
+    instance.exports.go();
+
+    ctx.putImageData(image, 0, 0);
 }
 
 init();
