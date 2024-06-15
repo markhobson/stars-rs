@@ -1,5 +1,6 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+#[no_mangle]
+pub extern fn the_answer() -> u32 {
+    42
 }
 
 #[cfg(test)]
@@ -7,8 +8,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    fn test_the_answer() {
+        let result = the_answer();
+        assert_eq!(result, 42);
     }
 }
