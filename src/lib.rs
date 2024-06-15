@@ -7,6 +7,7 @@ const STARS: usize = 3;
 static FRAME: AtomicU32 = AtomicU32::new(0);
 const STAR_X0: [u32; STARS] = [100, 500, 200];
 const STAR_Y0: [u32; STARS] = [100, 300, 500];
+const STAR_DX: [u32; STARS] = [1, 3, 2];
 
 #[no_mangle]
 static mut BUFFER: [u32; WIDTH * HEIGHT] = [0; WIDTH * HEIGHT];
@@ -28,7 +29,7 @@ fn render_frame_safe(buffer: &mut [u32; WIDTH * HEIGHT]) {
     clear_frame(buffer);
 
     for star in 0..STARS {
-        let x: usize = (STAR_X0[star] + f) as usize % WIDTH;
+        let x: usize = (STAR_X0[star] + f * STAR_DX[star]) as usize % WIDTH;
         let y = STAR_Y0[star] as usize;
         render_star(buffer, x, y);
     }
