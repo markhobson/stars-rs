@@ -10,6 +10,21 @@ struct Star {
     dx: u32,
 }
 
+impl Star {
+    fn render(&self, buffer: &mut [u32; WIDTH * HEIGHT], f: u32) {
+        let x0 = (self.x0 + f * self.dx) as usize % WIDTH;
+        let y0 = self.y0 as usize;
+        let colour = rgb(255, 255, 255);
+        let size = 3;
+
+        for y in y0..min(y0 + size, HEIGHT) {
+            for x in x0..min(x0 + size, WIDTH) {
+                buffer[y * WIDTH + x] = colour;
+            }
+        }
+    }
+}
+
 const STARS: [Star; STAR_COUNT] = [
     Star { x0: 100, y0: 100, dx: 1},
     Star { x0: 500, y0: 300, dx: 3},
@@ -38,9 +53,7 @@ fn render_frame_safe(buffer: &mut [u32; WIDTH * HEIGHT]) {
     clear_frame(buffer);
 
     for star in STARS {
-        let x: usize = (star.x0 + f * star.dx) as usize % WIDTH;
-        let y = star.y0 as usize;
-        render_star(buffer, x, y);
+        star.render(buffer, f);
     }
 }
 
@@ -49,17 +62,6 @@ fn clear_frame(buffer: &mut [u32; WIDTH * HEIGHT]) {
 
     for pixel in buffer.iter_mut() {
         *pixel = colour;
-    }
-}
-
-fn render_star(buffer: &mut [u32; WIDTH * HEIGHT], x0: usize, y0: usize) {
-    let colour = rgb(255, 255, 255);
-    let size = 3;
-
-    for y in y0..min(y0 + size, HEIGHT) {
-        for x in x0..min(x0 + size, WIDTH) {
-            buffer[y * WIDTH + x] = colour;
-        }
     }
 }
 
