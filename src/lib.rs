@@ -45,13 +45,15 @@ fn render_frame_safe(buffer: &mut [u32; WIDTH * HEIGHT]) {
 }
 
 fn clear_frame(buffer: &mut [u32; WIDTH * HEIGHT]) {
+    let colour = rgb(0, 0, 0);
+
     for pixel in buffer.iter_mut() {
-        *pixel = 0xFF_00_00_00;
+        *pixel = colour;
     }
 }
 
 fn render_star(buffer: &mut [u32; WIDTH * HEIGHT], x0: usize, y0: usize) {
-    let colour = 0xFF_FF_FF_FF;
+    let colour = rgb(255, 255, 255);
     let size = 3;
 
     for y in y0..min(y0 + size, HEIGHT) {
@@ -59,6 +61,14 @@ fn render_star(buffer: &mut [u32; WIDTH * HEIGHT], x0: usize, y0: usize) {
             buffer[y * WIDTH + x] = colour;
         }
     }
+}
+
+fn rgb(r: u8, g: u8, b: u8) -> u32 {
+    return rgba(r, g, b, 0xFF)
+}
+
+fn rgba(r: u8, g: u8, b: u8, a: u8) -> u32 {
+    return ((a as u32) << 24) | ((b as u32) << 16) | ((g as u32) << 8) | (r as u32);
 }
 
 // avoid std to minimise binary
