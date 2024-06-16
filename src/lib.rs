@@ -2,12 +2,21 @@ use core::sync::atomic::{AtomicU32, Ordering};
 
 const WIDTH: usize = 600;
 const HEIGHT: usize = 600;
-const STARS: usize = 3;
+const STAR_COUNT: usize = 3;
+
+struct Star {
+    x0: u32,
+    y0: u32,
+    dx: u32,
+}
+
+const STARS: [Star; STAR_COUNT] = [
+    Star { x0: 100, y0: 100, dx: 1},
+    Star { x0: 500, y0: 300, dx: 3},
+    Star { x0: 200, y0: 500, dx: 2},
+];
 
 static FRAME: AtomicU32 = AtomicU32::new(0);
-const STAR_X0: [u32; STARS] = [100, 500, 200];
-const STAR_Y0: [u32; STARS] = [100, 300, 500];
-const STAR_DX: [u32; STARS] = [1, 3, 2];
 
 #[no_mangle]
 static mut BUFFER: [u32; WIDTH * HEIGHT] = [0; WIDTH * HEIGHT];
@@ -28,9 +37,9 @@ fn render_frame_safe(buffer: &mut [u32; WIDTH * HEIGHT]) {
 
     clear_frame(buffer);
 
-    for star in 0..STARS {
-        let x: usize = (STAR_X0[star] + f * STAR_DX[star]) as usize % WIDTH;
-        let y = STAR_Y0[star] as usize;
+    for star in STARS {
+        let x: usize = (star.x0 + f * star.dx) as usize % WIDTH;
+        let y = star.y0 as usize;
         render_star(buffer, x, y);
     }
 }
