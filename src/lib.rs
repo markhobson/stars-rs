@@ -4,6 +4,23 @@ const WIDTH: usize = 600;
 const HEIGHT: usize = 600;
 const STAR_COUNT: usize = 3;
 
+struct Colour {
+    r: u8,
+    g: u8,
+    b: u8,
+    a: u8,
+}
+
+impl Colour {
+    fn from(r: u8, g: u8, b: u8) -> Colour {
+        Colour { r, g, b, a: 0xFF }
+    }
+
+    fn pixel(&self) -> u32 {
+        ((self.a as u32) << 24) | ((self.b as u32) << 16) | ((self.g as u32) << 8) | (self.r as u32)
+    }
+}
+
 struct Star {
     x0: u32,
     y0: u32,
@@ -14,12 +31,12 @@ impl Star {
     fn render(&self, buffer: &mut [u32; WIDTH * HEIGHT], f: u32) {
         let x0 = (self.x0 + f * self.dx) as usize % WIDTH;
         let y0 = self.y0 as usize;
-        let colour = rgb(255, 255, 255);
+        let colour = Colour::from(255, 255, 255);
         let size = 3;
 
         for y in y0..min(y0 + size, HEIGHT) {
             for x in x0..min(x0 + size, WIDTH) {
-                buffer[y * WIDTH + x] = colour;
+                buffer[y * WIDTH + x] = colour.pixel();
             }
         }
     }
@@ -58,19 +75,11 @@ fn render_frame_safe(buffer: &mut [u32; WIDTH * HEIGHT]) {
 }
 
 fn clear_frame(buffer: &mut [u32; WIDTH * HEIGHT]) {
-    let colour = rgb(0, 0, 0);
+    let colour = Colour::from(0, 0, 0);
 
     for pixel in buffer.iter_mut() {
-        *pixel = colour;
+        *pixel = colour.pixel();
     }
-}
-
-fn rgb(r: u8, g: u8, b: u8) -> u32 {
-    return rgba(r, g, b, 0xFF)
-}
-
-fn rgba(r: u8, g: u8, b: u8, a: u8) -> u32 {
-    return ((a as u32) << 24) | ((b as u32) << 16) | ((g as u32) << 8) | (r as u32);
 }
 
 // avoid std to minimise binary
