@@ -1,4 +1,4 @@
-# Rust Demo
+# Stars.rs
 
 Wasm graphics demo using Rust.
 

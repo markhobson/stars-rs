@@ -1,6 +1,6 @@
 async function init() {
     const {instance} = await WebAssembly.instantiateStreaming(
-        fetch("./target/wasm32-unknown-unknown/release/rust_demo.wasm")
+        fetch("./target/wasm32-unknown-unknown/release/stars_rs.wasm")
     );
 
     const width = 600;

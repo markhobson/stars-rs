@@ -1,5 +1,5 @@
 {
-  "name": "rust-demo",
+  "name": "stars-rs",
   "version": "1.0.0",
   "description": "Wasm graphics demo using Rust.",
   "main": "main.js",
