@@ -43,9 +43,9 @@ impl Star {
 }
 
 const STARS: [Star; STAR_COUNT] = [
-    Star { x0: 100, y0: 100, dx: 1},
-    Star { x0: 500, y0: 300, dx: 3},
-    Star { x0: 200, y0: 500, dx: 2},
+    Star { x0: 100, y0: 100, dx: 1 },
+    Star { x0: 500, y0: 300, dx: 3 },
+    Star { x0: 200, y0: 500, dx: 2 },
 ];
 
 static FRAME: AtomicU32 = AtomicU32::new(0);
