@@ -39,28 +39,30 @@ struct Star {
     x0: u32,
     y0: u32,
     dx: u8,
+    size: u8,
 }
 
 impl Star {
     fn new() -> Star {
-        Star { x0: rnd(WIDTH as u32), y0: rnd(HEIGHT as u32), dx: 1 + rnd(4) as u8 }
+        Star { x0: rnd(WIDTH as u32), y0: rnd(HEIGHT as u32), dx: 1 + rnd(4) as u8, size: 3 }
     }
 
     fn render(&self, buffer: &mut [u32; WIDTH * HEIGHT], f: u32) {
         let x0 = (self.x0 + f * self.dx as u32) as usize % WIDTH;
         let y0 = self.y0 as usize;
+        let x1 = min(x0 + self.size as usize, WIDTH);
+        let y1 = min(y0 + self.size as usize, HEIGHT);
         let colour = Colour::from(255, 255, 255);
-        let size = 3;
 
-        for y in y0..min(y0 + size, HEIGHT) {
-            for x in x0..min(x0 + size, WIDTH) {
+        for y in y0..y1 {
+            for x in x0..x1 {
                 buffer[y * WIDTH + x] = colour.pixel();
             }
         }
     }
 }
 
-const DEFAULT_STAR: Star = Star { x0: 0, y0: 0, dx: 0 };
+const DEFAULT_STAR: Star = Star { x0: 0, y0: 0, dx: 0, size: 0 };
 
 static mut STARS: [Star; STAR_COUNT] = [DEFAULT_STAR; STAR_COUNT];
 
