@@ -73,14 +73,13 @@ impl Star {
             let u0 = (c as i32 - v as i32).abs() as u32;
             let u1 = self.size as u32 - u0;
 
-            for u in u0..u1 {
-                let x = (x0 + u) as usize;
-                if x >= WIDTH {
-                    break;
-                }
+            Self::render_raster(buffer, (x0 + u0) as usize, (x0 + u1) as usize, y, self.pixel);
+        }
+    }
 
-                buffer[y * WIDTH + x] = self.pixel;
-            }
+    fn render_raster(buffer: &mut [u32; WIDTH * HEIGHT], x0: usize, x1: usize, y: usize, pixel: u32) {
+        for x in x0..min(x1, WIDTH) {
+            buffer[y * WIDTH + x] = pixel;
         }
     }
 }
@@ -131,4 +130,9 @@ fn clear_frame(buffer: &mut [u32; WIDTH * HEIGHT]) {
     for pixel in buffer.iter_mut() {
         *pixel = colour.pixel();
     }
+}
+
+// avoid std to minimise binary
+fn min(v1: usize, v2: usize) -> usize {
+    if v1 < v2 { v1 } else { v2 }
 }
