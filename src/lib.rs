@@ -1,4 +1,7 @@
 use core::sync::atomic::{AtomicU32, Ordering};
+use crate::colour::Colour;
+
+mod colour;
 
 const WIDTH: usize = 600;
 const HEIGHT: usize = 600;
@@ -16,23 +19,6 @@ fn random() -> f32 {
 
 fn rnd(max: u32) -> u32 {
     (random() * max as f32) as u32
-}
-
-struct Colour {
-    r: u8,
-    g: u8,
-    b: u8,
-    a: u8,
-}
-
-impl Colour {
-    fn from(r: u8, g: u8, b: u8) -> Self {
-        Self { r, g, b, a: 0xFF }
-    }
-
-    fn pixel(&self) -> u32 {
-        ((self.a as u32) << 24) | ((self.b as u32) << 16) | ((self.g as u32) << 8) | (self.r as u32)
-    }
 }
 
 struct Star {
