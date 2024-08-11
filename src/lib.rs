@@ -49,9 +49,9 @@ fn initialize(stars: &mut [Star; STAR_COUNT]) {
 }
 
 fn clear_frame(buffer: &mut [u32; WIDTH * HEIGHT]) {
-    let colour = Colour::from(0, 0, 0);
+    let background = Colour::from(0, 0, 0).pixel();
 
     for pixel in buffer.iter_mut() {
-        *pixel = colour.pixel();
+        *pixel = background;
     }
 }
