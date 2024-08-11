@@ -1,21 +1,17 @@
 use core::sync::atomic::{AtomicU32, Ordering};
-use crate::colour::Colour;
+use crate::buffer::{clear_frame, BUFFER, HEIGHT, WIDTH};
 use crate::star::{DEFAULT_STAR, Star};
 
+mod buffer;
 mod colour;
 mod math;
 mod star;
 
-const WIDTH: usize = 600;
-const HEIGHT: usize = 600;
 const STAR_COUNT: usize = 100;
 
 static mut STARS: [Star; STAR_COUNT] = [DEFAULT_STAR; STAR_COUNT];
 
 static FRAME: AtomicU32 = AtomicU32::new(0);
-
-#[no_mangle]
-static mut BUFFER: [u32; WIDTH * HEIGHT] = [0; WIDTH * HEIGHT];
 
 #[no_mangle]
 pub unsafe extern fn go() {
@@ -45,13 +41,5 @@ fn render_frame_safe(buffer: &mut [u32; WIDTH * HEIGHT], stars: &mut [Star; STAR
 fn initialize(stars: &mut [Star; STAR_COUNT]) {
     for index in 0..STAR_COUNT {
         stars[index] = Star::new()
-    }
-}
-
-fn clear_frame(buffer: &mut [u32; WIDTH * HEIGHT]) {
-    let background = Colour::from(0, 0, 0).pixel();
-
-    for pixel in buffer.iter_mut() {
-        *pixel = background;
     }
 }
