@@ -59,13 +59,26 @@ impl Star {
     }
 
     fn render(&self, buffer: &mut [u32; WIDTH * HEIGHT], f: u32) {
-        let x0 = (self.x0 + f * self.dx as u32) as usize % WIDTH;
-        let y0 = self.y0 as usize;
-        let x1 = min(x0 + self.size as usize, WIDTH);
-        let y1 = min(y0 + self.size as usize, HEIGHT);
+        let x0 = (self.x0 + f * self.dx as u32) % WIDTH as u32;
 
-        for y in y0..y1 {
-            for x in x0..x1 {
+        for v in 0..self.size as u32 {
+            let y = (self.y0 + v) as usize;
+            if y >= HEIGHT {
+                break;
+            }
+
+            let d = if v < self.size as u32 / 2 { 1 } else { 0 };
+            let c = (self.size - d) / 2;
+
+            let u0 = (c as i32 - v as i32).abs() as u32;
+            let u1 = self.size as u32 - u0;
+
+            for u in u0..u1 {
+                let x = (x0 + u) as usize;
+                if x >= WIDTH {
+                    break;
+                }
+
                 buffer[y * WIDTH + x] = self.pixel;
             }
         }
@@ -118,9 +131,4 @@ fn clear_frame(buffer: &mut [u32; WIDTH * HEIGHT]) {
     for pixel in buffer.iter_mut() {
         *pixel = colour.pixel();
     }
-}
-
-// avoid std to minimise binary
-fn min(v1: usize, v2: usize) -> usize {
-    if v1 < v2 { v1 } else { v2 }
 }
