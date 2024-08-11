@@ -26,8 +26,8 @@ struct Colour {
 }
 
 impl Colour {
-    fn from(r: u8, g: u8, b: u8) -> Colour {
-        Colour { r, g, b, a: 0xFF }
+    fn from(r: u8, g: u8, b: u8) -> Self {
+        Self { r, g, b, a: 0xFF }
     }
 
     fn pixel(&self) -> u32 {
@@ -44,10 +44,10 @@ struct Star {
 }
 
 impl Star {
-    fn new() -> Star {
+    fn new() -> Self {
         let z = rnd(4) as u8;
 
-        Star {
+        Self {
             x0: rnd(WIDTH as u32),
             y0: rnd(HEIGHT as u32),
             dx: 1 + z,
