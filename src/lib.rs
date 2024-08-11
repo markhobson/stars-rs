@@ -120,5 +120,5 @@ fn clear_frame(buffer: &mut [u32; WIDTH * HEIGHT]) {
 
 // avoid std to minimise binary
 fn min(v1: usize, v2: usize) -> usize {
-    return if v1 < v2 { v1 } else { v2 };
+    if v1 < v2 { v1 } else { v2 }
 }
