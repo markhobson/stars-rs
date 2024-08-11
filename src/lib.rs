@@ -2,7 +2,7 @@ use core::sync::atomic::{AtomicU32, Ordering};
 
 const WIDTH: usize = 600;
 const HEIGHT: usize = 600;
-const STAR_COUNT: usize = 3;
+const STAR_COUNT: usize = 100;
 
 extern {
     fn js_random() -> f32;
