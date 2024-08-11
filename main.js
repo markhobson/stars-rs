@@ -1,6 +1,11 @@
 async function init() {
     const {instance} = await WebAssembly.instantiateStreaming(
-        fetch("./target/wasm32-unknown-unknown/release/stars_rs.wasm")
+        fetch("./target/wasm32-unknown-unknown/release/stars_rs.wasm"),
+        {
+            "env": {
+                "js_random": Math.random,
+            }
+        }
     );
 
     const width = 600;

@@ -4,6 +4,20 @@ const WIDTH: usize = 600;
 const HEIGHT: usize = 600;
 const STAR_COUNT: usize = 3;
 
+extern {
+    fn js_random() -> f32;
+}
+
+fn random() -> f32 {
+    unsafe {
+        js_random()
+    }
+}
+
+fn rnd(max: u32) -> u32 {
+    (random() * max as f32) as u32
+}
+
 struct Colour {
     r: u8,
     g: u8,
@@ -28,6 +42,10 @@ struct Star {
 }
 
 impl Star {
+    fn new() -> Star {
+        Star { x0: rnd(WIDTH as u32), y0: rnd(HEIGHT as u32), dx: 1 + rnd(4) }
+    }
+
     fn render(&self, buffer: &mut [u32; WIDTH * HEIGHT], f: u32) {
         let x0 = (self.x0 + f * self.dx) as usize % WIDTH;
         let y0 = self.y0 as usize;
@@ -42,11 +60,9 @@ impl Star {
     }
 }
 
-const STARS: [Star; STAR_COUNT] = [
-    Star { x0: 100, y0: 100, dx: 1 },
-    Star { x0: 500, y0: 300, dx: 3 },
-    Star { x0: 200, y0: 500, dx: 2 },
-];
+const DEFAULT_STAR: Star = Star { x0: 0, y0: 0, dx: 0 };
+
+static mut STARS: [Star; STAR_COUNT] = [DEFAULT_STAR; STAR_COUNT];
 
 static FRAME: AtomicU32 = AtomicU32::new(0);
 
@@ -59,18 +75,28 @@ pub unsafe extern fn go() {
     // called from JavaScript. If you maintain that condition,
     // then we know that the &mut we're about to produce is
     // unique, and therefore safe.
-    render_frame_safe(&mut BUFFER)
+    render_frame_safe(&mut BUFFER, &mut STARS)
 }
 
 // We split this out so that we can escape 'unsafe' as quickly
 // as possible.
-fn render_frame_safe(buffer: &mut [u32; WIDTH * HEIGHT]) {
+fn render_frame_safe(buffer: &mut [u32; WIDTH * HEIGHT], stars: &mut [Star; STAR_COUNT]) {
     let f = FRAME.fetch_add(1, Ordering::Relaxed);
+
+    if f == 0 {
+        initialize(stars);
+    }
 
     clear_frame(buffer);
 
-    for star in STARS {
+    for star in stars {
         star.render(buffer, f);
+    }
+}
+
+fn initialize(stars: &mut [Star; STAR_COUNT]) {
+    for index in 0..STAR_COUNT {
+        stars[index] = Star::new()
     }
 }
 
