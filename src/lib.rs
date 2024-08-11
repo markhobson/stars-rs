@@ -45,13 +45,13 @@ struct Star {
 
 impl Star {
     fn new() -> Self {
-        let z = rnd(4) as u8;
+        let z = rnd(3) as u8;
 
         Self {
             x0: rnd(WIDTH as u32),
             y0: rnd(HEIGHT as u32),
             dx: 1 + z,
-            size: 1 + z,
+            size: 2 + z,
             pixel: Colour::from(255, 255, 255).pixel(),
         }
     }
