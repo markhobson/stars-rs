@@ -38,16 +38,16 @@ impl Colour {
 struct Star {
     x0: u32,
     y0: u32,
-    dx: u32,
+    dx: u8,
 }
 
 impl Star {
     fn new() -> Star {
-        Star { x0: rnd(WIDTH as u32), y0: rnd(HEIGHT as u32), dx: 1 + rnd(4) }
+        Star { x0: rnd(WIDTH as u32), y0: rnd(HEIGHT as u32), dx: 1 + rnd(4) as u8 }
     }
 
     fn render(&self, buffer: &mut [u32; WIDTH * HEIGHT], f: u32) {
-        let x0 = (self.x0 + f * self.dx) as usize % WIDTH;
+        let x0 = (self.x0 + f * self.dx as u32) as usize % WIDTH;
         let y0 = self.y0 as usize;
         let colour = Colour::from(255, 255, 255);
         let size = 3;
