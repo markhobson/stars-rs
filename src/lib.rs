@@ -1,25 +1,13 @@
 use core::sync::atomic::{AtomicU32, Ordering};
 use crate::colour::Colour;
+use crate::math::{min, rnd};
 
 mod colour;
+mod math;
 
 const WIDTH: usize = 600;
 const HEIGHT: usize = 600;
 const STAR_COUNT: usize = 100;
-
-extern {
-    fn js_random() -> f32;
-}
-
-fn random() -> f32 {
-    unsafe {
-        js_random()
-    }
-}
-
-fn rnd(max: u32) -> u32 {
-    (random() * max as f32) as u32
-}
 
 struct Star {
     x0: u32,
@@ -116,9 +104,4 @@ fn clear_frame(buffer: &mut [u32; WIDTH * HEIGHT]) {
     for pixel in buffer.iter_mut() {
         *pixel = colour.pixel();
     }
-}
-
-// avoid std to minimise binary
-fn min(v1: usize, v2: usize) -> usize {
-    if v1 < v2 { v1 } else { v2 }
 }
