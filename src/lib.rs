@@ -44,7 +44,9 @@ struct Star {
 
 impl Star {
     fn new() -> Star {
-        Star { x0: rnd(WIDTH as u32), y0: rnd(HEIGHT as u32), dx: 1 + rnd(4) as u8, size: 3 }
+        let z = rnd(4) as u8;
+
+        Star { x0: rnd(WIDTH as u32), y0: rnd(HEIGHT as u32), dx: 1 + z, size: 1 + z }
     }
 
     fn render(&self, buffer: &mut [u32; WIDTH * HEIGHT], f: u32) {
