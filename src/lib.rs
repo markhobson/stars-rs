@@ -1,5 +1,5 @@
 use core::sync::atomic::{AtomicU32, Ordering};
-use crate::buffer::{clear_frame, BUFFER, HEIGHT, WIDTH};
+use crate::buffer::{clear_buffer, BUFFER, HEIGHT, WIDTH};
 use crate::star::{DEFAULT_STAR, Star};
 
 mod buffer;
@@ -31,7 +31,7 @@ fn render_frame_safe(buffer: &mut [u32; WIDTH * HEIGHT], stars: &mut [Star; STAR
         initialize(stars);
     }
 
-    clear_frame(buffer);
+    clear_buffer(buffer);
 
     for star in stars {
         star.render(buffer, f);
